@@ -1,6 +1,10 @@
 package br.com.ggomes12.sistemaspringboot.entity;
 
+import br.com.ggomes12.sistemaspringboot.dto.UserDTO;
 import jakarta.persistence.*;
+import org.springframework.beans.BeanUtils;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -17,6 +21,13 @@ public class UserEntity {
     private String password;
     @Column(nullable = false, length = 100)
     private String email;
+
+    public UserEntity(UserDTO userDto) {
+        BeanUtils.copyProperties(userDto, this);
+    }
+
+    public UserEntity() {
+    }
 
     public Long getId() {
         return id;
@@ -56,5 +67,18 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        UserEntity that = (UserEntity) obj;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
